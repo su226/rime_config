@@ -1,0 +1,13 @@
+__include: luna_pinyin.schema:/
+
+schema:
+  schema_id: chaizi
+  name: 拆字
+  version: '0.0.1'
+  author:
+    - su226
+  description: 供朙月拼音拆字功能内部使用
+
+translator:
+  dictionary: chaizi
+

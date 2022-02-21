@@ -1,0 +1,9 @@
+[submodule "dev/chaizi"]
+	path = dev/chaizi
+	url = https://github.com/kfcd/chaizi
+[submodule "dev/emojilib"]
+	path = dev/emojilib
+	url = https://github.com/muan/emojilib
+[submodule "dev/unicode-emoji-json"]
+	path = dev/unicode-emoji-json
+	url = https://github.com/muan/unicode-emoji-json

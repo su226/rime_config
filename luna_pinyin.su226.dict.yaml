@@ -1,0 +1,42 @@
+---
+name: luna_pinyin.su226
+version: "1.0"
+sort: by_weight
+use_preset_vocabulary: true
+import_tables:
+  - luna_pinyin
+  - moegirl
+  - minecraft
+  - THUOCL_animal
+  - THUOCL_caijing
+  - THUOCL_car
+  - THUOCL_chengyu
+  - THUOCL_diming
+  - THUOCL_food
+  - THUOCL_IT
+  - THUOCL_law
+  - THUOCL_lishimingren
+  - THUOCL_medical
+  - THUOCL_poem
+...
+圈一
+圈二
+圈三
+圈四
+圈五
+圈六
+圈七
+圈八
+圈九
+圈十
+圈十一
+圈十二
+圈十三
+圈十四
+圈十五
+圈十六
+圈十七
+圈十八
+圈十九
+圈二十
+i了	i le

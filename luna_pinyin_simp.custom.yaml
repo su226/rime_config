@@ -1,0 +1,118 @@
+patch:
+  # 名字
+  schema/name: 拼音
+
+  # 开关
+  # 使用系统自带的中英切换
+  switches/@0/states: null
+  # 使用RIME的中英切换
+  # switches/@0/states: [中, 英]
+  switches/@1/states: [半, 全]
+  switches/@2/states: [繁, 简]
+  switches/@3/states: [标, Ｐ]
+
+  # 词库
+  translator/dictionary: luna_pinyin.su226
+
+  speller/algebra/+:
+    # 模糊音
+    - erase/^xx$/                  # 第一行保留
+    - derive/^([zcs])h/$1/         # zh, ch, sh => z, c, s
+    - derive/^([zcs])([^h])/$1h$2/ # z, c, s => zh, ch, sh
+    - derive/^n/l/                 # n => l
+    - derive/^l/n/                 # l => n
+    - derive/([eio])n$/$1ng/       # en => eng, in => ing, on => ong
+    - derive/([eio])ng$/$1n/       # eng => en, ing => in, ong => on
+
+    # 简拼
+    - abbrev/^([a-z]).+$/$1/             # 首字母
+    - abbrev/^([zcs]h).+$/$1/            # zh, ch, sh
+
+  schema/dependencies:
+    - emoji
+    - easy_en
+    - chaizi
+
+  engine/translators/+:
+    - table_translator@emoji_lookup
+    - table_translator@easy_en
+    # 使用同文输入法时拆字功能需要解除下一行的注释
+    # - reverse_lookup_translator
+
+  engine/filters:
+    - simplifier@emoji_suggestion
+    - simplifier@symbol_suggestion
+    # 解除下一行注释启用模糊音矫正（后面还有）
+    # - lua_filter@fuzz_fix
+    - lua_filter@emoji_lookup
+    - simplifier
+    - uniquifier
+
+  switches/+:
+    - name: emoji_suggestion
+      reset: 1
+      states: [🖤, 💙]
+    - name: symbol_suggestion
+      reset: 1
+      states: [✗, ✓]
+    # 使用同文输入法时解除下面的注释启用按键
+    # - options: [ _keyboard_number ]
+    #   states: [ 🔢 ]
+    # - options: [ _liquid_keyboard ]
+    #   states: [ 🔣 ]
+    # - options: [ _keyboard_edit ]
+    #   states: [ ● ]
+    # - options: [ _key_Hide ]
+    #   states: [ ▼ ]
+
+  # 中文到emoji
+  emoji_suggestion:
+    opencc_config: emoji.json
+    option_name: emoji_suggestion
+    tips: none
+
+  # 中文到符号
+  symbol_suggestion:
+    opencc_config: symbol.json
+    option_name: symbol_suggestion
+    tips: none
+  
+  # 英文到emoji
+  engine/segmentors/@after 2: affix_segmentor@emoji_lookup
+  recognizer/patterns/emoji_lookup: "^`[a-z]*$"
+  emoji_lookup:
+    tag: emoji_lookup
+    prefix: "`"
+    tips: "[emoji]"
+    dictionary: emoji
+    enable_sentence: false
+
+  # 拆字
+  recognizer/patterns/reverse_lookup: "^u[a-z]*$"
+  simplifier/excluded_types: [reverse_lookup]
+  reverse_lookup:
+    dictionary: chaizi
+    prefix: "u"
+    tips: "[拆]"
+    preedit_format:
+      - xform/([nl])v/$1ü/
+    comment_format:
+      - xform/([nl])v/$1ü/
+  
+  # 解除下面的注释启用模糊音矫正
+  # translator/spelling_hints: 9
+  # translator/comment_format:
+  #   - "xform/([nl])v/$1ü/"
+  #   - "xform/([nl])ue/$1üe/"
+  #   - "xform/([jqxy])v/$1u/"
+
+  # 中英混输
+  recognizer/patterns/uppercase: ""
+  speller/alphabet: 'zyxwvutsrqponmlkjihgfedcbaZYXWVUTSRQPONMLKJIHGFEDCBA'
+  easy_en:
+    dictionary: easy_en
+    comment_format:
+      - xform/^.+$//
+    enable_completion: false
+    enable_sentence: false
+    initial_quality: -1
